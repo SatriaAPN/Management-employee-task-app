@@ -1,5 +1,8 @@
-const PalembangController = require('./palembang');
+const UserController = require('./user');
+const TaskController = require('./task');
 
-const palembangController = new PalembangController();
 
-module.exports = { palembangController };
+const userController = new UserController();
+const taskController = new TaskController();
+
+module.exports = { userController, taskController };

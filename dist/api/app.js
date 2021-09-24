@@ -7,14 +7,17 @@ const { sequelize } = require('../models');
 // Basic Configuration
 const port = process.env.PORT || 3000;
 
-// Import the Router
-app.use(require('./routers'));
-
 // Set Static File
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// Initialize the Database
-require('../config/database');
+// authentication verification middleware
+app.use(require('../middleware/authVerif'));
+
+// importing router from the backend
+app.use(require('./routers'));
+
+// error handler middleware
+app.use(require('../middleware/errorHandler'));
 
 // Start the Server Listening
 app.listen(port, async() => {
@@ -22,6 +25,6 @@ app.listen(port, async() => {
 
         // initializing the database
     await sequelize.authenticate();
-    console.log('database on');
+    console.log('database on ');
 });
   
