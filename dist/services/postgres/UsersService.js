@@ -80,8 +80,7 @@ class UsersService {
 
     async verifyUserByUuid (uuid) {
         const user = await this._User.findOne({
-            where: {uuid},
-            raw: true
+            where: { uuid }
         })
 
         if(!user){

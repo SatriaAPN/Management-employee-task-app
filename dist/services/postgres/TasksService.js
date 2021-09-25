@@ -13,12 +13,12 @@ class UsersService {
         this._User = UserModel;
 
         this.getUserTasksByUserUuid = this.getUserTasksByUserUuid.bind(this);
+        this.verifyTaskAndEmployeeWithUuid = this.verifyTaskAndEmployeeWithUuid.bind(this);
     }
 
     async createTask(employeeUuid, title, description){
-        console.log('here')
         const employee = await this._UsersService.getUserByUuid(employeeUuid);
-console.log('here2')
+
         // Create the user in the database
         const task = await this._Task.create({
             uuid: nanoid(16),
@@ -26,7 +26,7 @@ console.log('here2')
             employeeId: employee.id,
             description,
         });
-        console.log('here3')
+
         return task;
     }
 
@@ -57,8 +57,10 @@ console.log('here2')
         }
     }
 
-    async deleteTaskByUuid(uuid){
+    async deleteTaskByUuid(uuid, userUuid){
         await this.verifyTaskByUuid(uuid);
+
+        await this.verifyTaskAndEmployeeWithUuid(uuid, userUuid);
 
         const task = await this._Task.findOne({
             where: { uuid }
@@ -77,8 +79,27 @@ console.log('here2')
         return task;
     }
 
-    async updateTask(uuid, title, description){
+    async verifyTaskAndEmployeeWithUuid(taskUuid, userUuid){
+        await this._UsersService.verifyUserByUuid(userUuid);
+
+        const user = await this._UsersService.getUserByUuid(userUuid);
+
+        const task = await this._Task.findOne({
+            where: { 
+                uuid: taskUuid,
+                employeeId: user.id
+            }
+        })
+
+        if(!task){
+            throw new InvariantError('you are not the employee that create this task');
+        }
+    }
+
+    async updateTask(uuid, title, description, userUuid){
         await this.verifyTaskByUuid(uuid);
+
+        await this.verifyTaskAndEmployeeWithUuid(uuid, userUuid);
 
         const task = await this.getTaskByUuid(uuid);
 
