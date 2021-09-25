@@ -21,11 +21,9 @@
             <input type="email" name="email" id="" placeholder="email" class="outline-none border py-2 px-5 ">
             <p class="text-white text-lg mb-1">password</p>
             <input type="password" name="password" id="" placeholder="password" class="outline-none border py-2 px-5 ">
-
-                <div class="alert">
-                    <%= typeof message!= 'undefined'? message: '' %>
-                </div>
-
+            <div class="alert" style="color: rgb(0, 0, 0)1);">
+                <%= typeof errorMessage!= 'undefined'? errorMessage: '' %>
+            </div>
             <button class="reply px-5 mt-5 py-1 rounded-md bg-gray-200">Login</button>
         </form>
         <!-- END FORM -->

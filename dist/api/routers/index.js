@@ -2,6 +2,8 @@ const router = require('express')();
 
 router.use('/users', require('./users'));
 
+router.use('/tasks', require('./tasks'));
+
 router.use('/api/users', require('./usersApi'));
 
 router.use('/api/tasks', require('./tasksApi'));

@@ -41,6 +41,7 @@ class UserController{
       res.setHeader('Set-Cookie', [`token=${tokenData.token}; path=/; expires= ${tokenData.date};Secure; HttpOnly`]);
       res.status(201).redirect('/');
     }catch(err){
+      req.pg = './public/usersRegister';
       next(err);
     }
   }
@@ -74,9 +75,7 @@ class UserController{
       res.setHeader('Set-Cookie', [`token=${tokenData.token}; path=/; expires= ${tokenData.date};Secure; HttpOnly`]);
       res.status(200).redirect('/');
     }catch(error){
-      const websiteData = await this._cmsService.getCmsData();
       req.pg = './public/loginPage';
-      req.wd = websiteData;
       next(error);
     }
   }

@@ -46,6 +46,47 @@ console.log('here2')
 
         return tasks;
     }
+
+    async verifyTaskByUuid(uuid){
+        const task = await this._Task.findOne({
+            where: { uuid }
+        })
+
+        if(!task){
+            throw new InvariantError('task tidak ditemukan')
+        }
+    }
+
+    async deleteTaskByUuid(uuid){
+        await this.verifyTaskByUuid(uuid);
+
+        const task = await this._Task.findOne({
+            where: { uuid }
+        })
+
+        await task.destroy();
+    }
+
+    async getTaskByUuid(uuid){
+        await this.verifyTaskByUuid(uuid);
+
+        const task = await this._Task.findOne({
+            where: { uuid }
+        })
+
+        return task;
+    }
+
+    async updateTask(uuid, title, description){
+        await this.verifyTaskByUuid(uuid);
+
+        const task = await this.getTaskByUuid(uuid);
+
+        task.title = title;
+        task.description = description;
+
+        await task.save();
+    }
 }
 
 module.exports = UsersService;

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users Management</title>
+    <title>Tasks Management</title>
     <!-- importing the css/stylesheet -->
     <link rel="stylesheet" href="/asset/css/global.css">
     <link rel="stylesheet" href="/asset/css/nav.css">
@@ -22,7 +22,7 @@
     <nav>
         <div class="container">
             <div class="nav-logo">
-                Read Comment
+                Tasks Management
             </div>
             <div class="">
                 <a href="/api/users/logout">Logout</a>
@@ -33,6 +33,24 @@
     <!-- Main-part -->
     <div class="container">
         <!-- component -->
+        <% if(user.role == "employee"){ %>
+            <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 pr-10 lg:px-8 mt-10 bg-white">
+                <p class="text-base font-bold my-2 text-center">Add New Task</p>
+                <form action="/api/tasks/create" method="POST" class="flex w-5/6 flex-col md:flex-row md:w-3/6 mx-auto mb-5 justify-between items-center">
+                    <div class="flex flex-col">
+                        <p class="text-sm my-2">task title</p>
+                        <input type="text" name="title" id="title" placeholder="task title" class="outline-none border" required>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="text-sm my-2">task description</p>
+                        <textarea type="text" name="description" id="description" placeholder="description" class="outline-none border" required></textarea>
+                    </div>
+                    
+                    <button class="bg-blue-500 text-white px-2 h-10 rounded-lg mt-5">Add Task</button>
+                </form>
+            </div>
+        <% } %>
+        
         <div>
             <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 pr-10 lg:px-8 mt-8 bg-white">
                 <table id="table" class="display">
@@ -62,8 +80,8 @@
                                 <td><%= task.createdAt.toDateString(); %></td>
                                 <td><%- task.updatedAt.toDateString(); %></td>
                                 <% if(user.role == "employee"){ %>
-                                    <td><a href= "" class="button bg-green-600 text-white text-center px-3 py-1 whitespace-nowrap">edit</a></td>
-                                    <td ><a href="#" class="button bg-red-600 text-white text-center px-3 py-1">delete</a></td>    
+                                    <td><a href= <%- `/tasks/${task.uuid}/edit` %> class="button bg-green-600 text-white text-center px-3 py-1 whitespace-nowrap">edit</a></td>
+                                    <td ><a href= <%- `/api/tasks/${task.uuid}/delete` %> class="button bg-red-600 text-white text-center px-3 py-1">delete</a></td>    
                                 <% } %>
                             </tr>
                         <% } %>
