@@ -7,7 +7,16 @@
   "license": "MIT",
   "scripts": {
     "start": "node ./dist/api/app.js",
-    "start-dev": "nodemon ./dist/api/app.js"
+    "start-dev": "nodemon ./dist/api/app.js",
+    "install-views": "npm install views/",
+    "install-app": "npm install && npm run install-views",
+    "db-create": "sequelize db:create",
+    "db-migrate-status": "sequelize db:migrate:status",
+    "db-migrate-up": "sequelize db:migrate",
+    "db-migrate-down": "sequelize db:migrate:undo",
+    "db-migrate-down-all": "sequelize db:migrate:undo:all",
+    "db-migrate-redo": "npm run migrate-down && npm run migrate-up",
+    "db-migrate-redo-all": "npm run migrate-down-all && npm run migrate-up"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -21,6 +30,7 @@
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.6.5",
-    "sequelize-cli": "^6.2.0"
+    "sequelize-cli": "^6.2.0",
+    "views": "file:views"
   }
 }
