@@ -5,7 +5,7 @@ const {
 
 // services class initialization
 const usersService = new UsersService();
-const tasksService = new TasksService();
+const tasksService = new TasksService(usersService);
 
 
 module.exports = { 

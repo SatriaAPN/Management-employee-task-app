@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit website</title>
+    <!-- importing the css/stylesheet -->
+    <link rel="stylesheet" href="/asset/css/global.css">
+    <link rel="stylesheet" href="/asset/css/nav.css">
+    <link rel="stylesheet" href="/asset/css/webSettings.css">
+    <!-- font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <%- include('parts/usernavbar2', {}); %>
+
+    <!-- Main-part -->
+    <div class="container container-form">
+        <p>Edit website</p>
+       <form action="/cms/setting" method="POST" enctype="multipart/form-data">
+            <div class="other">
+                <label for="name">Nama website</label>
+                <input type="text" name="websiteName" placeholder="name" id="name" required >
+                <label for="meta-tag">Meta tag</label>
+                <textarea name="metaTag" id="meta-tag" cols="30" rows="10" placeholder="Meta Tag" required ><%- data.metaTag %> </textarea>
+                <p> Pavicon</p>
+                  <div class="profile-pict">
+                     <input type="file" onchange="loadimg(event)" name="pavIcon">
+                     <img src= <%- `${data.pavIcon}` %> id="imgplace">
+                  </div>
+                <label for="password">Password</label>
+                
+                <input type="password" id="password" name="password" placeholder="input your password to save the change" required minlength="6">
+                <% if(typeof message != "undefined"){ %>
+                    <label style="color: red;"><%= message %></label>
+                <% } %> 
+                <button>change</button>
+             </div>
+       </form>
+    </div>
+
+    <!-- import the js -->
+    <script src="/asset/js/editprofile.js"></script>
+    <!-- javascript for render the value in the input form -->
+    <script type="text/javascript"> 
+        document.getElementById("name").value = <%- JSON.stringify(data.websiteName) %>;
+    </script>
+</body>
+</html>

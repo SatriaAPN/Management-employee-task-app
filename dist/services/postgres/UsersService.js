@@ -1,4 +1,4 @@
-const { UserModel, ArticleModel } = require('../../models');
+const { UserModel, TaskModel } = require('../../models');
 const bcrypt = require("bcrypt");
 const { nanoid } = require('nanoid');
 
@@ -10,14 +10,12 @@ const AuthenticationError = require('../../exceptions/AuthenticationError');
 class UsersService {
     constructor(StorageService){
         this._StorageService = StorageService;
-        this._User = UserModel;
-        this._Article = ArticleModel;
 
-        this.updateUser = this.updateUser.bind(this);
-        this.updatePassword = this.updatePassword.bind(this);
+        this._User = UserModel;
+        this._Task = TaskModel;
     }
 
-    async createUser ({ name, email, password, role }) {
+    async createUser (name, email, password, role) {
         // Checking if the email already registered
         await this.verifyEmail(email);
 
@@ -38,32 +36,24 @@ class UsersService {
         return user;
     }
 
-    async updateUser({name, about}, profilePicture, userUuid){
-        const user = await this.getUserByUuid(userUuid);
+    async userLogin(email, password) { 
+        const user = await this._User.findOne({
+            where: { email }
+        });
 
-        user.name = name;
-        user.about = about;
-        
-        if(profilePicture != null){
-            this._StorageService.deleteFileByFileName(user.profilePicture);
-            user.profilePicture = `/uploads/${profilePicture}`;
+        if(!user){
+            throw new AuthenticationError('Kredensial yang Anda berikan salah');
         }
-       
-        await user.save();
+
+        // check if the password are the same
+        const checkPassword = await bcrypt.compare(password, user.hashed);
+        if(checkPassword){
+            return user;
+        }else{
+            throw new AuthenticationError('Kredensial yang Anda berikan salah');
+        }
     }
-
-    async updatePassword(userUuid, oldPassword, newPassword){
-        const user = await this.getUserByUuid(userUuid);
-
-        // hashing the password
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-
-        user.hashed = hashedPassword;
-
-        await user.save();
-    }
-    
+ 
     async verifyEmail(email){
         const userFound = await this._User.findOne({
             where: { email }
@@ -74,6 +64,18 @@ class UsersService {
                 'Gagal menambahkan user. email sudah digunakan.',
             );
         }
+    }
+
+    async getUserWithTasks(uuid){
+        const user = await this._User.findOne({
+            where: { uuid },
+            include : [{        
+                model: this._Task,
+                as: "tasks"
+            }],
+        })
+
+        return user;
     }
 
     async verifyUserByUuid (uuid) {
@@ -115,25 +117,6 @@ class UsersService {
       
         return user;
     }
-
-    async userLogin ({email, password}) { 
-        const user = await this._User.findOne({
-            where: {email: email},
-            raw: true
-        });
-
-        if(!user){
-            throw new AuthenticationError('Kredensial yang Anda berikan salah');
-        }
-
-        // check if the password are the same
-        const checkPassword = await bcrypt.compare(password, user.hashed);
-        if(checkPassword){
-            return user;
-        }else{
-            throw new AuthenticationError('Kredensial yang Anda berikan salah');
-        }
-    }
     
     async userDashboard (uuid) {
         const userArticles = await User.findOne({
@@ -149,21 +132,6 @@ class UsersService {
         })
     
         return userArticles;
-    }
-
-    async getUserAndArticlesByUuid(uuid){
-        const user = this._User.findOne({
-            where: {uuid},
-            order: [
-                [{ model: this._Article, as: 'articles' }, 'createdAt', 'DESC' ]
-            ],
-            include:[{
-                model: this._Article,
-                as: 'articles'
-            }]
-        })
-
-        return user;
     }
 
     async getAllUsers({limit, createdAt, role, status}){
@@ -186,14 +154,6 @@ class UsersService {
         })
 
         return users;
-    }
-
-    async updateUserRole(uuid, role){
-        const user = await this.getUserByUuid(uuid);
-
-        user.role = role;
-
-        user.save();
     }
 }
 

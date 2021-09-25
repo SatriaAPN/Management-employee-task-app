@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Register</title>
+    <!-- IMPORTING CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/tailwind.css">
+    <!-- END IMPORTING CSS -->
+</head>
+<body class="bg-body-bg ">
+    <div class="container flex items-center justify-around h-screen">
+        <div class="flex flex-col bg-blue-600 px-4 py-2 w-5/6 lg:w-2/6">
+            <h2 class="my-1 font-bold text-xl text-center text-white mt-4">Register Here</h2>
+            <!-- FORM START -->
+            <form action= "/api/users/register" method="POST" class="register flex flex-col mx-auto my-6  w-full">
+                <p class="text-white text-lg mb-3">username</p>
+                <input type="text" name="name" id="name" placeholder="name" class="outline-none border py-2 px-5 mb-3">
+                <p class="text-white text-lg mb-3">email</p>
+                <input type="email" name="email" id="email" placeholder="email" class="outline-none border py-2 px-5 mb-3">
+                <p class="text-white text-lg mb-3">password</p>
+                <input type="password" name="password" id="" placeholder="password" class="outline-none border py-2 px-5 mb-3">
+                <p class="text-white text-lg mb-3">Role</p>
+                    <select class="outline-none border" name="role" id="limit">
+                        <option value="manager" >Manager</option>
+                        <option value="employee">Employee</option>
+                    </select>
+                <p style="color: rgb(177, 0, 0)"><%= typeof message != 'undefined'? message: '' %></p>
+                <button class="reply px-5 mt-5 py-1 rounded-md bg-blue-700 text-white">Register</button>
+            </form>
+            <!-- FORM END-->
+            <h3 class="text-white text-sm my-6 mx-auto"> have an account? <a href="/users/login" class="text-blue-400 font-bold">Login here</a></h3>
+        </div>
+    </div>
+</body>
+    <!-- javascript for render the value in the input form -->
+    <% if(typeof data != "undefined"){ %>
+        <script type="text/javascript">
+                document.getElementById("name").value = <%- JSON.stringify(data.name) %>;
+                document.getElementById("email").value = <%- JSON.stringify(data.email) %>;
+        </script>
+    <% } %>
+    <!-- IMPORT JAVASCRIPT -->
+    <script src="/asset/darkmode.js"></script>
+    <script src="/asset/js/comment.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <!-- END IMPORT JAVASCRIPT -->
+</html>

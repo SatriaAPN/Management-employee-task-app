@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<!-- HEAD -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/tailwind.css">
+</head>
+<!-- END HEAD -->
+<!-- BODY -->
+<body class="bg-body-bg ">
+    <div class="container flex items-center justify-around h-screen">
+        <div class="flex flex-col bg-blue-600 px-4 py-2 w-5/6 lg:w-2/6">
+        <h2 class="my-1 font-bold text-xl text-center text-white mt-4">Login</h2>
+        <!-- FORM -->
+        <form action="/api/users/login" method="POST" class="new-comment flex flex-col mx-auto mt-10 mb-6 w-4/6 ">
+            <p class="text-white text-lg mb-1">Email</p>
+            <input type="email" name="email" id="" placeholder="email" class="outline-none border py-2 px-5 ">
+            <p class="text-white text-lg mb-1">password</p>
+            <input type="password" name="password" id="" placeholder="password" class="outline-none border py-2 px-5 ">
+
+                <div class="alert">
+                    <%= typeof message!= 'undefined'? message: '' %>
+                </div>
+
+            <button class="reply px-5 mt-5 py-1 rounded-md bg-gray-200">Login</button>
+        </form>
+        <!-- END FORM -->
+       <h3 class="text-white text-sm my-6 mx-auto">not have a account <a href="/users/register" class="text-blue-400 font-bold">Register here</a></h3>
+        </div>
+    </div>
+</body>
+<!-- BODY END -->
+    <!-- JAVASCRIPT -->
+    <script src="/asset/darkmode.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <!-- END JAVASCRIPT -->
+</html>

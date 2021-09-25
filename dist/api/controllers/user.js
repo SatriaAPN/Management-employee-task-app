@@ -1,21 +1,94 @@
+const TokenManager = require('../../config/lib/tokenize/TokenManager');
+
 class UserController{
-    constructor(service, validator){
-        this._service = service;
+  constructor(service, validator){
+    this._service = service;
+
+    this._validator = validator;
+
+    this._TokenManager = TokenManager;
+
+    this.postUserRegister = this.postUserRegister.bind(this);
+    this.postUserLogin = this.postUserLogin.bind(this);
+  }
+
+  async getUserRegister(req, res, next){
+    try{
+      if(req.user){
+        return res.status(200).redirect(`/`);
+      }
+
+      res.status(200).render('./public/usersRegister');
+    }catch(err){
+      next(err);
     }
+  }
 
-    async userRegister(req, res, next){
-        try{
-            await validator.validateUserRegister(req.body);
+  async postUserRegister(req, res, next){
+    try{
+      if(req.user){
+        return res.status(200).redirect(`/`);
+      }
 
-            const { name, email, password } = req.body;
+      await this._validator.validateUserRegister(req.body);
 
-            const userRegistered = await this._service.createUser(name, email, password);
+      const { name, email, password, role } = req.body;
 
-            res.status(201).json({});
-        }catch(err){
-            next(err);
-        }
+      const userRegistered = await this._service.createUser(name, email, password, role);
+
+      const tokenData = await this._TokenManager.generateJwtToken(userRegistered.uuid, userRegistered.role)
+
+      res.setHeader('Set-Cookie', [`token=${tokenData.token}; path=/; expires= ${tokenData.date};Secure; HttpOnly`]);
+      res.status(201).redirect('/');
+    }catch(err){
+      next(err);
     }
+  }
+
+  async getUserLogin(req, res, next){
+    try{
+      if(req.user){
+        return res.status(200).redirect(`/`);
+      }
+
+      res.status(200).render('./public/loginPage');
+    }catch(err){
+      next(err);
+    }
+  }
+
+  async postUserLogin(req, res, next) {
+    try{
+      if(req.user){
+        return res.status(200).redirect('/users');
+      }
+
+      this._validator.validateUserLogin(req.body);
+
+      const { email, password } = req.body;
+
+      const user = await this._service.userLogin(email, password);
+
+      const tokenData = await this._TokenManager.generateJwtToken(user.uuid, user.role)
+
+      res.setHeader('Set-Cookie', [`token=${tokenData.token}; path=/; expires= ${tokenData.date};Secure; HttpOnly`]);
+      res.status(200).redirect('/');
+    }catch(error){
+      const websiteData = await this._cmsService.getCmsData();
+      req.pg = './public/loginPage';
+      req.wd = websiteData;
+      next(error);
+    }
+  }
+
+  async getUserLogout (req, res, next) {
+    try{
+      res.setHeader('Set-Cookie', [`token= ; path=/`]);
+      res.status(200).redirect('/users/login');
+    }catch(err){
+      next(err);
+    }
+  }
 }
 
 module.exports = UserController;
