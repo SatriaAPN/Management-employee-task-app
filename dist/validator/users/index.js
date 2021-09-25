@@ -1,9 +1,7 @@
 const InvariantError = require('../../exceptions/InvariantError');
 const { 
-  UserRegisterSchema, 
-  UserLoginSchema, 
-  UserUpdateSchema, 
-  UserChangePasswordSchema 
+  UserRegisterSchema,
+  UserLoginSchema
 } = require('./schema');
 
 const UsersValidator = {
@@ -16,20 +14,6 @@ const UsersValidator = {
   },
   validateUserLogin: (payload) => {
     const validationResult = UserLoginSchema.validate(payload);
-
-    if (validationResult.error) {
-      throw new InvariantError(validationResult.error.message);
-    }
-  },
-  validateUserUpdate: (payload) => {
-    const validationResult = UserUpdateSchema.validate(payload);
-
-    if (validationResult.error) {
-      throw new InvariantError(validationResult.error.message);
-    }
-  },
-  validateUserChangePassword: (payload) => {
-    const validationResult = UserChangePasswordSchema.validate(payload);
 
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);

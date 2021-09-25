@@ -7,10 +7,11 @@ const {
 } = require('../../services');
 
 const {
-    UsersValidator
+    UsersValidator,
+    TasksValidator
 } = require('../../validator');
 
 const userController = new UserController(usersService, UsersValidator);
-const taskController = new TaskController(tasksService);
+const taskController = new TaskController(tasksService, TasksValidator);
 
 module.exports = { userController, taskController };

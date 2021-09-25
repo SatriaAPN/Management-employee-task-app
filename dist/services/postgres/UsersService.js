@@ -116,44 +116,6 @@ class UsersService {
       
         return user;
     }
-    
-    async userDashboard (uuid) {
-        const userArticles = await User.findOne({
-            where: {
-                uuid: uuid
-            },
-            include : [{        
-                model: this._Article,
-                required: true,
-                right: false,
-            }],
-            raw: true  
-        })
-    
-        return userArticles;
-    }
-
-    async getAllUsers({limit, createdAt, role, status}){
-        if(!limit || !createdAt || !role || !status){
-            return [];
-        }
-
-        if(role!='admin' && role!='writer' && role!='reader'){
-            role = ['admin', 'writer', 'reader']
-        }
-
-        createdAt = createdAt=='newest'? 'DESC': 'ASC';
-
-        const users = await this._User.findAll({
-            where: {
-                role
-            },
-            order: [['role', createdAt]],
-            limit: limit,
-        })
-
-        return users;
-    }
 }
 
 module.exports = UsersService;

@@ -23,31 +23,4 @@ const UserLoginSchema = joi.object({
         .required(),
 });
 
-const UserUpdateSchema = joi.object({
-    name: 
-        joi.string()
-        .required(),
-    password: 
-        joi.string()
-        .min(6)
-        .required(),
-    about: 
-        joi.string()
-        .allow(null, ''),
-}); 
-
-const UserChangePasswordSchema = joi.object({
-    oldPassword: 
-        joi.string()
-        .required(),
-    newPassword: 
-        joi.string()
-        .min(6)
-        .required(),
-    confirmNewPassword: 
-        joi.string()
-        .required(),
-}); 
-
-
-module.exports = { UserRegisterSchema, UserLoginSchema, UserUpdateSchema, UserChangePasswordSchema };
+module.exports = { UserRegisterSchema, UserLoginSchema  };

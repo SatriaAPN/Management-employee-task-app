@@ -1,9 +1,10 @@
 class TaskController{
-    constructor(service){
+    constructor(service, validator){
         this._service = service;
 
-        this.getTasks = this.getTasks.bind(this);
+        this._validator = validator;
 
+        this.getTasks = this.getTasks.bind(this);
         this.postCreateTask = this.postCreateTask.bind(this);
         this.getDeleteTask = this.getDeleteTask.bind(this);
         this.getUpdateTask = this.getUpdateTask.bind(this);
@@ -20,9 +21,11 @@ class TaskController{
                 return res.status(202).render('./public/tasksManagement', { data: { tasks } });
             }
 
+            this._validator.validateTaskCreateUpdate(req.body);
+
             const { title, description } = req.body;
 
-            const task = await this._service.createTask(req.user.sub, title, description);
+            await this._service.createTask(req.user.sub, title, description);
 
             res.status(202).redirect('/');
         }catch(err){
@@ -99,6 +102,8 @@ class TaskController{
             if(req.user.role != "employee"){
                 return res.status(202).redirect('/');
             }
+
+            this._validator.validateTaskCreateUpdate(req.body);
 
             const { uuid } = req.params;
             const { title, description } = req.body;
