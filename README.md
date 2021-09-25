@@ -2,7 +2,8 @@
 this is an application that let manager manage the tasks of all the employee, and the employee can perform the CRUD operation on tasks.
 
 ## this project was made by :
-- Satria Aluh Perwira Nusa (Fullstack)
+- Fadil Ramadhan (Frontend)
+- Satria Aluh Perwira Nusa (Backend)
 
 ## How to Install the Pariwisata-daerah-API
 - clone this repository first
